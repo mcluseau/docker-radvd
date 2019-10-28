@@ -1,0 +1,15 @@
+#! /bin/sh
+img=mcluseau/radvd
+
+set -e
+
+docker build -t $img .
+v=$(docker run --rm -it --entrypoint apk mcluseau/radvd info radvd -d |head -n 1 |cut -d' ' -f1 |cut -d- -f2-)
+
+echo "-> version: $v"
+echo "tagging as $img:$v"
+
+docker tag $img $img:$v
+
+docker push $img:$v
+docker push $img
